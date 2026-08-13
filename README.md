@@ -6,7 +6,7 @@
 
 # 
 
-# !\[Visão geral dos diagramas](docs/galeria-desenhos-diagramas.drawio)
+# [Visão geral dos diagramas](docs/galeria-desenhos-diagramas.drawio)
 
 # 
 
