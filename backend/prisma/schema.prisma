@@ -1,0 +1,63 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum DrawingStatus {
+  disponivel
+  pendente
+  reservado
+  vendido
+}
+
+enum CommissionOrderStatus {
+  na_fila
+  em_progresso
+  concluido
+}
+
+model Drawing {
+  id          String        @id @default(uuid())
+  title       String
+  description String
+  price       Decimal
+  imageUrl    String
+  status      DrawingStatus @default(disponivel)
+  createdAt   DateTime      @default(now())
+}
+
+model CommissionType {
+  id       String            @id @default(uuid())
+  name     String
+  priceMin Decimal
+  priceMax Decimal
+  rules    String
+  active   Boolean           @default(true)
+  orders   CommissionOrder[]
+}
+
+model CommissionOrder {
+  id               String                @id @default(uuid())
+  commissionTypeId String
+  commissionType   CommissionType        @relation(fields: [commissionTypeId], references: [id])
+  buyerName        String
+  buyerContact     String
+  priority         Int
+  status           CommissionOrderStatus @default(na_fila)
+  createdAt        DateTime              @default(now())
+}
+
+model Admin {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+}
