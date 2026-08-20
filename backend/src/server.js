@@ -3,6 +3,8 @@ const cors = require("cors");
 require("dotenv").config();
 
 const drawingsRoutes = require("./routes/drawings");
+const commissionTypesRoutes = require("./routes/commissionTypes");
+const commissionOrdersRoutes = require("./routes/commissionOrders");
 
 const app = express();
 
@@ -14,6 +16,8 @@ app.get("/", (req, res) => {
 });
 
 app.use("/drawings", drawingsRoutes);
+app.use("/commission-types", commissionTypesRoutes);
+app.use("/commission-orders", commissionOrdersRoutes);
 
 const PORT = process.env.PORT || 3333;
 
