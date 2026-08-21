@@ -1,10 +1,10 @@
 const express = require("express");
 const prisma = require("../prismaClient");
-
+const verifyToken = require("../middleware/auth");
 const router = express.Router();
 
 // GET /commission-orders - lista a fila, ordenada por prioridade
-router.get("/", async (req, res) => {
+router.get("/", verifyToken,  async (req, res) => {
   try {
     const orders = await prisma.commissionOrder.findMany({
       orderBy: { priority: "asc" },
@@ -18,7 +18,7 @@ router.get("/", async (req, res) => {
 });
 
 // GET /commission-orders/:id
-router.get("/:id", async (req, res) => {
+router.get("/:id",verifyToken, async (req, res) => {
   try {
     const { id } = req.params;
     const order = await prisma.commissionOrder.findUnique({
@@ -70,7 +70,7 @@ router.post("/", async (req, res) => {
 });
 
 // PUT /commission-orders/:id - edita status ou prioridade
-router.put("/:id", async (req, res) => {
+router.put("/:id",verifyToken, async (req, res) => {
   try {
     const { id } = req.params;
     const { status, priority } = req.body;
@@ -91,7 +91,7 @@ router.put("/:id", async (req, res) => {
 });
 
 // DELETE /commission-orders/:id
-router.delete("/:id", async (req, res) => {
+router.delete("/:id",verifyToken, async (req, res) => {
   try {
     const { id } = req.params;
     await prisma.commissionOrder.delete({ where: { id } });

@@ -1,6 +1,6 @@
 const express = require("express");
 const prisma = require("../prismaClient");
-
+const verifyToken = require("../middleware/auth");
 const router = express.Router();
 
 // GET /drawings - lista todos os desenhos
@@ -35,7 +35,7 @@ router.get("/:id", async (req, res) => {
 });
 
 // POST /drawings - cria um novo desenho
-router.post("/", async (req, res) => {
+router.post("/", verifyToken, async (req, res) => {
   try {
     const { title, description, price, imageUrl } = req.body;
 
@@ -55,7 +55,7 @@ router.post("/", async (req, res) => {
 });
 
 // PUT /drawings/:id - edita um desenho existente
-router.put("/:id", async (req, res) => {
+router.put("/:id", verifyToken, async (req, res) => {
   try {
     const { id } = req.params;
     const { title, description, price, imageUrl, status } = req.body;
@@ -76,7 +76,7 @@ router.put("/:id", async (req, res) => {
 });
 
 // DELETE /drawings/:id - remove um desenho
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", verifyToken, async (req, res) => {
   try {
     const { id } = req.params;
 
