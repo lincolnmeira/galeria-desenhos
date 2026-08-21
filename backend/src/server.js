@@ -27,3 +27,6 @@ app.listen(PORT, () => {
 
 const authRoutes = require("./routes/auth");
 app.use("/auth", authRoutes);
+
+const uploadRoutes = require("./routes/upload");
+app.use("/upload", uploadRoutes);
