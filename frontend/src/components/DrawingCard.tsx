@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import type { Drawing } from "../types/Drawing";
 
 interface DrawingCardProps {
@@ -18,7 +19,10 @@ export function DrawingCard({ drawing }: DrawingCardProps) {
   });
 
   return (
-    <div className="rounded-lg overflow-hidden shadow-md bg-white">
+    <Link
+      to={`/drawings/${drawing.id}`}
+      className="rounded-lg overflow-hidden shadow-md bg-white block hover:shadow-lg transition-shadow"
+    >
       <img
         src={drawing.imageUrl}
         alt={drawing.title}
@@ -34,6 +38,6 @@ export function DrawingCard({ drawing }: DrawingCardProps) {
           </span>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }

@@ -1,13 +1,15 @@
-import { Gallery } from "./components/Gallery";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { GalleryPage } from "./pages/GalleryPage";
+import { DrawingDetailPage } from "./pages/DrawingDetailPage";
 
 function App() {
   return (
-    <div>
-      <header className="text-center py-8">
-        <h1 className="text-3xl font-bold">Galeria de Desenhos</h1>
-      </header>
-      <Gallery />
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<GalleryPage />} />
+        <Route path="/drawings/:id" element={<DrawingDetailPage />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
