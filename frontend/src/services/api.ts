@@ -34,3 +34,43 @@ export async function requestPurchase(id: string): Promise<Drawing> {
 
   return response.json();
 }
+
+import type { CommissionType } from "../types/CommissionType";
+
+export async function getCommissionTypes(): Promise<CommissionType[]> {
+  const response = await fetch(`${API_URL}/commission-types`);
+
+  if (!response.ok) {
+    throw new Error("Erro ao buscar tipos de encomenda");
+  }
+
+  return response.json();
+}
+
+interface CreateCommissionOrderInput {
+  commissionTypeId: string;
+  buyerName: string;
+  buyerContact: string;
+}
+
+interface CommissionOrderResult {
+  id: string;
+  priority: number;
+}
+
+export async function createCommissionOrder(
+  input: CreateCommissionOrderInput
+): Promise<CommissionOrderResult> {
+  const response = await fetch(`${API_URL}/commission-orders`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(input),
+  });
+
+  if (!response.ok) {
+    const data = await response.json().catch(() => null);
+    throw new Error(data?.error ?? "Erro ao solicitar encomenda");
+  }
+
+  return response.json();
+}
