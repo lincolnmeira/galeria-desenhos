@@ -21,3 +21,16 @@ export async function getDrawingById(id: string): Promise<Drawing> {
 
   return response.json();
 }
+
+export async function requestPurchase(id: string): Promise<Drawing> {
+  const response = await fetch(`${API_URL}/drawings/${id}/request-purchase`, {
+    method: "POST",
+  });
+
+  if (!response.ok) {
+    const data = await response.json().catch(() => null);
+    throw new Error(data?.error ?? "Erro ao solicitar compra");
+  }
+
+  return response.json();
+}

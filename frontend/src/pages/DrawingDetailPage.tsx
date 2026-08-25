@@ -2,13 +2,8 @@ import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import type { Drawing } from "../types/Drawing";
 import { getDrawingById } from "../services/api";
+import { statusLabels } from "../utils/statusLabels";
 
-const statusLabels: Record<string, string> = {
-  disponivel: "Disponível",
-  pendente: "Pendente",
-  reservado: "Reservado",
-  vendido: "Vendido",
-};
 
 export function DrawingDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -53,6 +48,14 @@ export function DrawingDetailPage() {
           className="w-full max-h-[500px] object-cover"
         />
         <div className="p-6">
+          {drawing.status === "disponivel" && (
+  <Link
+    to={`/drawings/${drawing.id}/purchase`}
+    className="mt-4 block text-center bg-black text-white font-semibold py-3 rounded-lg hover:bg-gray-800 transition-colors"
+  >
+    Comprar
+  </Link>
+)}
           <h1 className="text-2xl font-bold">{drawing.title}</h1>
           <p className="text-gray-600 mt-2">{drawing.description}</p>
           <div className="flex justify-between items-center mt-4">

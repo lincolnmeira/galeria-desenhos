@@ -54,6 +54,28 @@ router.post("/", verifyToken, async (req, res) => {
   }
 });
 
+// POST /drawings/:id/request-purchase - público, marca como pendente
+router.post("/:id/request-purchase", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const result = await prisma.drawing.updateMany({
+      where: { id, status: "disponivel" },
+      data: { status: "pendente" },
+    });
+
+    if (result.count === 0) {
+      return res.status(409).json({ error: "Este desenho não está mais disponível" });
+    }
+
+    const drawing = await prisma.drawing.findUnique({ where: { id } });
+    res.json(drawing);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Erro ao solicitar compra" });
+  }
+});
+
 // PUT /drawings/:id - edita um desenho existente
 router.put("/:id", verifyToken, async (req, res) => {
   try {

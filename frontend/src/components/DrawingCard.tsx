@@ -1,16 +1,10 @@
 import { Link } from "react-router-dom";
 import type { Drawing } from "../types/Drawing";
+import { statusLabels } from "../utils/statusLabels";
 
 interface DrawingCardProps {
   drawing: Drawing;
 }
-
-const statusLabels: Record<string, string> = {
-  disponivel: "Disponível",
-  pendente: "Pendente",
-  reservado: "Reservado",
-  vendido: "Vendido",
-};
 
 export function DrawingCard({ drawing }: DrawingCardProps) {
   const price = Number(drawing.price).toLocaleString("pt-BR", {
