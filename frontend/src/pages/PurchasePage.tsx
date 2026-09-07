@@ -58,9 +58,9 @@ export function PurchasePage() {
       <div className="mt-6 bg-gray-50 rounded-lg p-4 text-left text-sm text-gray-700">
         <p className="font-semibold mb-2">Como finalizar sua compra:</p>
         <ol className="list-decimal list-inside space-y-1">
-          <li>Clique no botão abaixo para conversar pelo WhatsApp</li>
-          <li>Combine a forma de pagamento (PIX ou transferência) diretamente com a artista</li>
-          <li>Este desenho ficará reservado até a confirmação</li>
+          <li>Click the button below to chat on WhatsApp</li>
+          <li>Arrange payment (PIX or bank transfer) directly with the artist</li>
+          <li>This drawing will stay reserved until confirmed</li>
         </ol>
       </div>
 

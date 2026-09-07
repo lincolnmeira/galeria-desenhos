@@ -11,14 +11,14 @@ export function Gallery() {
   useEffect(() => {
     getDrawings()
       .then(setDrawings)
-      .catch(() => setError("Não foi possível carregar a galeria."))
+      .catch(() => setError("Could not load the gallery."))
       .finally(() => setLoading(false));
   }, []);
 
-  if (loading) return <p className="text-center py-10">Carregando...</p>;
+  if (loading) return <p className="text-center py-10">Loading...</p>;
   if (error) return <p className="text-center py-10 text-red-600">{error}</p>;
   if (drawings.length === 0) {
-    return <p className="text-center py-10">Nenhum desenho disponível ainda.</p>;
+    return <p className="text-center py-10">No drawings available yet.</p>;
   }
 
   return (

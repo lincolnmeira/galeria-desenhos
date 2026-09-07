@@ -74,3 +74,27 @@ export async function createCommissionOrder(
 
   return response.json();
 }
+
+interface LoginInput {
+  email: string;
+  password: string;
+}
+
+interface LoginResult {
+  token: string;
+}
+
+export async function login(input: LoginInput): Promise<LoginResult> {
+  const response = await fetch(`${API_URL}/auth/login`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(input),
+  });
+
+  if (!response.ok) {
+    const data = await response.json().catch(() => null);
+    throw new Error(data?.error ?? "Erro ao fazer login");
+  }
+
+  return response.json();
+}

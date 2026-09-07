@@ -3,7 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import type { Drawing } from "../types/Drawing";
 import { getDrawingById } from "../services/api";
 import { statusLabels } from "../utils/statusLabels";
-
+import { formatPrice } from "../utils/formatPrice";
 
 export function DrawingDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -16,54 +16,42 @@ export function DrawingDetailPage() {
 
     getDrawingById(id)
       .then(setDrawing)
-      .catch(() => setError("Desenho não encontrado."))
+      .catch(() => setError("Drawing not found."))
       .finally(() => setLoading(false));
   }, [id]);
 
-  if (loading) return <p className="text-center py-10">Carregando...</p>;
+  if (loading) return <p className="text-center py-10">Loading...</p>;
 
   if (error || !drawing) {
-    return (
-      <p className="text-center py-10 text-red-600">
-        {error ?? "Desenho não encontrado."}
-      </p>
-    );
+    return <p className="text-center py-10 text-red-600">{error ?? "Drawing not found."}</p>;
   }
-
-  const price = Number(drawing.price).toLocaleString("pt-BR", {
-    style: "currency",
-    currency: "BRL",
-  });
 
   return (
     <div className="max-w-2xl mx-auto p-6">
       <Link to="/" className="text-sm text-gray-500 hover:underline">
-        ← Voltar para a galeria
+        ← Back to gallery
       </Link>
 
       <div className="mt-4 rounded-lg overflow-hidden shadow-md bg-white">
-        <img
-          src={drawing.imageUrl}
-          alt={drawing.title}
-          className="w-full max-h-[500px] object-cover"
-        />
+        <img src={drawing.imageUrl} alt={drawing.title} className="w-full max-h-[500px] object-cover" />
         <div className="p-6">
-          {drawing.status === "disponivel" && (
-  <Link
-    to={`/drawings/${drawing.id}/purchase`}
-    className="mt-4 block text-center bg-black text-white font-semibold py-3 rounded-lg hover:bg-gray-800 transition-colors"
-  >
-    Comprar
-  </Link>
-)}
           <h1 className="text-2xl font-bold">{drawing.title}</h1>
           <p className="text-gray-600 mt-2">{drawing.description}</p>
           <div className="flex justify-between items-center mt-4">
-            <span className="text-xl font-bold">{price}</span>
+            <span className="text-xl font-bold">{formatPrice(drawing.price)}</span>
             <span className="text-xs uppercase tracking-wide text-gray-500">
               {statusLabels[drawing.status]}
             </span>
           </div>
+
+          {drawing.status === "disponivel" && (
+            <Link
+              to={`/drawings/${drawing.id}/purchase`}
+              className="mt-4 block text-center bg-black text-white font-semibold py-3 rounded-lg hover:bg-gray-800 transition-colors"
+            >
+              Buy
+            </Link>
+          )}
         </div>
       </div>
     </div>
