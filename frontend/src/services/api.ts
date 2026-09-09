@@ -98,3 +98,51 @@ export async function login(input: LoginInput): Promise<LoginResult> {
 
   return response.json();
 }
+
+interface CreateDrawingInput {
+  title: string;
+  description: string;
+  price: string;
+  imageUrl: string;
+}
+
+export async function createDrawing(token: string, input: CreateDrawingInput): Promise<Drawing> {
+  const response = await fetch(`${API_URL}/drawings`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+    body: JSON.stringify(input),
+  });
+  if (!response.ok) throw new Error("Error creating drawing");
+  return response.json();
+}
+
+export async function updateDrawingStatus(token: string, id: string, status: string): Promise<Drawing> {
+  const response = await fetch(`${API_URL}/drawings/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+    body: JSON.stringify({ status }),
+  });
+  if (!response.ok) throw new Error("Error updating status");
+  return response.json();
+}
+
+export async function deleteDrawing(token: string, id: string): Promise<void> {
+  const response = await fetch(`${API_URL}/drawings/${id}`, {
+    method: "DELETE",
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!response.ok) throw new Error("Error deleting drawing");
+}
+
+export async function uploadImage(token: string, file: File): Promise<string> {
+  const formData = new FormData();
+  formData.append("image", file);
+  const response = await fetch(`${API_URL}/upload`, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${token}` },
+    body: formData,
+  });
+  if (!response.ok) throw new Error("Error uploading image");
+  const data = await response.json();
+  return data.imageUrl;
+}
