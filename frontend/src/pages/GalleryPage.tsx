@@ -4,9 +4,12 @@ import { Gallery } from "../components/Gallery";
 export function GalleryPage() {
   return (
     <div>
-      <header className="text-center py-8">
-        <h1 className="text-3xl font-bold">Drawing Gallery</h1>
-        <Link to="/commissions" className="text-sm text-gray-500 hover:underline">
+      <header className="text-center py-12">
+        <h1 className="font-display text-4xl text-gold">✦ Drawing Gallery</h1>
+        <Link
+          to="/commissions"
+          className="inline-block mt-3 text-sm text-dustyrose hover:text-gold transition-colors"
+        >
           Request a commission →
         </Link>
       </header>

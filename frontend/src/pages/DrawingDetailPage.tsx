@@ -13,41 +13,30 @@ export function DrawingDetailPage() {
 
   useEffect(() => {
     if (!id) return;
-
-    getDrawingById(id)
-      .then(setDrawing)
-      .catch(() => setError("Drawing not found."))
-      .finally(() => setLoading(false));
+    getDrawingById(id).then(setDrawing).catch(() => setError("Drawing not found.")).finally(() => setLoading(false));
   }, [id]);
 
-  if (loading) return <p className="text-center py-10">Loading...</p>;
-
-  if (error || !drawing) {
-    return <p className="text-center py-10 text-red-600">{error ?? "Drawing not found."}</p>;
-  }
+  if (loading) return <p className="text-center py-10 text-dustyrose">Loading...</p>;
+  if (error || !drawing) return <p className="text-center py-10 text-coral">{error ?? "Drawing not found."}</p>;
 
   return (
     <div className="max-w-2xl mx-auto p-6">
-      <Link to="/" className="text-sm text-gray-500 hover:underline">
-        ← Back to gallery
-      </Link>
+      <Link to="/" className="text-sm text-dustyrose hover:text-gold transition-colors">← Back to gallery</Link>
 
-      <div className="mt-4 rounded-lg overflow-hidden shadow-md bg-white">
+      <div className="mt-4 rounded-lg overflow-hidden bg-surface border border-gold/20">
         <img src={drawing.imageUrl} alt={drawing.title} className="w-full max-h-[500px] object-cover" />
         <div className="p-6">
-          <h1 className="text-2xl font-bold">{drawing.title}</h1>
-          <p className="text-gray-600 mt-2">{drawing.description}</p>
+          <h1 className="font-display text-2xl text-cream">{drawing.title}</h1>
+          <p className="text-dustyrose mt-2">{drawing.description}</p>
           <div className="flex justify-between items-center mt-4">
-            <span className="text-xl font-bold">{formatPrice(drawing.price)}</span>
-            <span className="text-xs uppercase tracking-wide text-gray-500">
-              {statusLabels[drawing.status]}
-            </span>
+            <span className="text-xl font-semibold text-gold">{formatPrice(drawing.price)}</span>
+            <span className="text-xs text-dustyrose">{statusLabels[drawing.status]}</span>
           </div>
 
           {drawing.status === "disponivel" && (
             <Link
               to={`/drawings/${drawing.id}/purchase`}
-              className="mt-4 block text-center bg-black text-white font-semibold py-3 rounded-lg hover:bg-gray-800 transition-colors"
+              className="mt-5 block text-center bg-gold text-maroon font-semibold py-3 rounded-lg hover:bg-cream active:scale-95 transition-all duration-200"
             >
               Buy
             </Link>
