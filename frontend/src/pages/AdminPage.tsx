@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { DrawingForm } from "../components/admin/DrawingForm";
 import { DrawingsAdminList } from "../components/admin/DrawingsAdminList";
+import { CommissionOrdersAdminList } from "../components/admin/CommissionOrdersAdminList";
 
 export function AdminPage() {
   const { logout } = useAuth();
@@ -15,6 +16,7 @@ export function AdminPage() {
       </div>
       <DrawingForm onCreated={() => setRefreshKey((k) => k + 1)} />
       <DrawingsAdminList refreshKey={refreshKey} />
+      <CommissionOrdersAdminList />
     </div>
   );
 }

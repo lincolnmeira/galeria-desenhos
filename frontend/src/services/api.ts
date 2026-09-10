@@ -146,3 +146,28 @@ export async function uploadImage(token: string, file: File): Promise<string> {
   const data = await response.json();
   return data.imageUrl;
 }
+export async function getCommissionOrdersAdmin(token: string) {
+  const response = await fetch(`${API_URL}/commission-orders`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!response.ok) throw new Error("Error fetching orders");
+  return response.json();
+}
+
+export async function updateCommissionOrder(token: string, id: string, data: Record<string, unknown>) {
+  const response = await fetch(`${API_URL}/commission-orders/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+    body: JSON.stringify(data),
+  });
+  if (!response.ok) throw new Error("Error updating order");
+  return response.json();
+}
+
+export async function deleteCommissionOrder(token: string, id: string) {
+  const response = await fetch(`${API_URL}/commission-orders/${id}`, {
+    method: "DELETE",
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!response.ok) throw new Error("Error deleting order");
+}

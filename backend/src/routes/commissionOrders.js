@@ -78,6 +78,7 @@ router.put("/:id",verifyToken, async (req, res) => {
     const order = await prisma.commissionOrder.update({
       where: { id },
       data: { status, priority },
+      include: {commissionType: true},
     });
 
     res.json(order);
