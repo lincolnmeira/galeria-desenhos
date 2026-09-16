@@ -39,30 +39,32 @@ export function CommissionOrdersAdminList() {
   if (loading) return <p>Loading...</p>;
 
   return (
-    <table className="w-full border-collapse mt-10">
+    <table className="w-full border-collapse text-cream">
       <thead>
-        <tr className="border-b text-left">
+        <tr className="border-b border-gold/20 text-left">
           <th className="py-2">#</th><th className="py-2">Buyer</th><th className="py-2">Type</th>
           <th className="py-2">Status</th><th className="py-2"></th>
         </tr>
       </thead>
       <tbody>
         {orders.map((order) => (
-          <tr key={order.id} className="border-b">
+          <tr key={order.id} className="border-b border-gold/10">
             <td className="py-2">
-              <input type="number" value={order.priority} className="w-14 border rounded p-1"
+              <input type="number" value={order.priority}
+                className="w-14 bg-maroon border border-gold/30 rounded p-1 text-cream focus:outline-none focus:border-gold"
                 onChange={(e) => handleChange(order.id, "priority", Number(e.target.value))} />
             </td>
-            <td className="py-2">{order.buyerName}<br /><span className="text-xs text-gray-500">{order.buyerContact}</span></td>
-            <td className="py-2">{order.commissionType.name}</td>
+            <td className="py-2">{order.buyerName}<br /><span className="text-xs text-dustyrose">{order.buyerContact}</span></td>
+            <td className="py-2 text-dustyrose">{order.commissionType.name}</td>
             <td className="py-2">
-              <select value={order.status} className="border rounded p-1"
+              <select value={order.status}
+                className="bg-maroon border border-gold/30 rounded p-1 text-cream focus:outline-none focus:border-gold"
                 onChange={(e) => handleChange(order.id, "status", e.target.value)}>
                 {statusOptions.map((s) => <option key={s} value={s}>{statusLabels[s]}</option>)}
               </select>
             </td>
             <td className="py-2">
-              <button onClick={() => handleDelete(order.id)} className="text-red-600 text-sm hover:underline">Delete</button>
+              <button onClick={() => handleDelete(order.id)} className="text-coral text-sm hover:underline">Delete</button>
             </td>
           </tr>
         ))}

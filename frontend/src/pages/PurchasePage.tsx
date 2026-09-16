@@ -6,6 +6,12 @@ import { formatPrice } from "../utils/formatPrice";
 
 const WHATSAPP_NUMBER = import.meta.env.VITE_WHATSAPP_NUMBER;
 
+const steps = [
+  "Click the button below to chat on WhatsApp",
+  "Arrange payment (PIX or bank transfer) directly with the artist",
+  "This drawing will stay reserved until confirmed",
+];
+
 export function PurchasePage() {
   const { id } = useParams<{ id: string }>();
   const [drawing, setDrawing] = useState<Drawing | null>(null);
@@ -18,6 +24,7 @@ export function PurchasePage() {
   }, [id]);
 
   if (loading) return <p className="text-center py-10 text-dustyrose">Checking availability...</p>;
+
   if (error || !drawing) {
     return (
       <div className="max-w-md mx-auto p-6 text-center">
@@ -33,24 +40,34 @@ export function PurchasePage() {
 
   return (
     <div className="max-w-md mx-auto p-6 text-center">
-      <img src={drawing.imageUrl} alt={drawing.title} className="w-full max-h-72 object-cover rounded-lg border border-gold/20" />
+      <img
+        src={drawing.imageUrl}
+        alt={drawing.title}
+        className="w-full max-h-72 object-cover rounded-lg border border-gold/30"
+      />
       <h1 className="font-display text-xl text-cream mt-4">{drawing.title}</h1>
-      <p className="text-2xl font-semibold text-gold mt-2">{price}</p>
+      <p className="text-2xl font-semibold text-gold mt-1">{price}</p>
 
-      <div className="mt-6 bg-surface border border-gold/20 rounded-lg p-4 text-left text-sm text-dustyrose">
-        <p className="font-semibold text-cream mb-2">How to complete your purchase:</p>
-        <ol className="list-decimal list-inside space-y-1">
-          <li>Click the button below to chat on WhatsApp</li>
-          <li>Arrange payment (PIX or bank transfer) directly with the artist</li>
-          <li>This drawing will stay reserved until confirmed</li>
+            <div className="mt-6 bg-surface border border-gold/20 rounded-lg p-5 text-left">
+        <p className="font-display text-gold mb-3">How to complete your purchase</p>
+        <ol className="space-y-3">
+          {steps.map((step, i) => (
+            <li key={i} className="flex items-start gap-3">
+              <span className="shrink-0 flex items-center justify-center w-6 h-6 rounded-full bg-gold text-maroon text-xs font-bold">
+                {i + 1}
+              </span>
+              <span className="text-sm text-dustyrose">{step}</span>
+            </li>
+          ))}
         </ol>
       </div>
+
 
       
        <a href={whatsappUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className="mt-6 inline-block w-full bg-green-600 text-white font-semibold py-3 rounded-lg hover:bg-green-500 active:scale-95 transition-all duration-200"
+        className="mt-6 flex items-center justify-center gap-2 w-full bg-green-600 text-white font-semibold py-3 rounded-lg border border-gold/40 hover:bg-green-500 hover:border-gold active:scale-95 transition-all duration-200"
       >
         Chat on WhatsApp
       </a>

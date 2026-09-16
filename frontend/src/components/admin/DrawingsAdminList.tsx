@@ -31,27 +31,27 @@ export function DrawingsAdminList({ refreshKey }: { refreshKey: number }) {
   if (loading) return <p>Loading...</p>;
 
   return (
-    <table className="w-full border-collapse">
+    <table className="w-full border-collapse text-cream">
       <thead>
-        <tr className="border-b text-left">
+        <tr className="border-b border-gold/20 text-left">
           <th className="py-2">Title</th><th className="py-2">Price</th>
           <th className="py-2">Status</th><th className="py-2"></th>
         </tr>
       </thead>
       <tbody>
         {drawings.map((drawing) => (
-          <tr key={drawing.id} className="border-b">
+          <tr key={drawing.id} className="border-b border-gold/10">
             <td className="py-2">{drawing.title}</td>
-            <td className="py-2">{formatPrice(drawing.price)}</td>
+            <td className="py-2 text-gold">{formatPrice(drawing.price)}</td>
             <td className="py-2">
               <select value={drawing.status}
                 onChange={(e) => handleStatusChange(drawing.id, e.target.value as DrawingStatus)}
-                className="border rounded p-1">
+                className="bg-maroon border border-gold/30 rounded p-1 text-cream focus:outline-none focus:border-gold">
                 {statusOptions.map((s) => <option key={s} value={s}>{statusLabels[s]}</option>)}
               </select>
             </td>
             <td className="py-2">
-              <button onClick={() => handleDelete(drawing.id)} className="text-red-600 text-sm hover:underline">
+              <button onClick={() => handleDelete(drawing.id)} className="text-coral text-sm hover:underline">
                 Delete
               </button>
             </td>
