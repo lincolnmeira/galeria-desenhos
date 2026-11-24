@@ -6,7 +6,7 @@ export async function getDrawings(): Promise<Drawing[]> {
   const response = await fetch(`${API_URL}/drawings`);
 
   if (!response.ok) {
-    throw new Error("Erro ao buscar desenhos");
+    throw new Error("Unable to load artwork");
   }
 
   return response.json();
@@ -16,7 +16,7 @@ export async function getDrawingById(id: string): Promise<Drawing> {
   const response = await fetch(`${API_URL}/drawings/${id}`);
 
   if (!response.ok) {
-    throw new Error("Erro ao buscar desenho");
+    throw new Error("Unable to load this artwork");
   }
 
   return response.json();
@@ -29,7 +29,7 @@ export async function requestPurchase(id: string): Promise<Drawing> {
 
   if (!response.ok) {
     const data = await response.json().catch(() => null);
-    throw new Error(data?.error ?? "Erro ao solicitar compra");
+    throw new Error(data?.error ?? "Unable to reserve this artwork");
   }
 
   return response.json();
@@ -41,10 +41,64 @@ export async function getCommissionTypes(): Promise<CommissionType[]> {
   const response = await fetch(`${API_URL}/commission-types`);
 
   if (!response.ok) {
-    throw new Error("Erro ao buscar tipos de encomenda");
+    throw new Error("Unable to load commission options");
   }
 
   return response.json();
+}
+
+export async function getCommissionTypesAdmin(token: string): Promise<CommissionType[]> {
+  const response = await fetch(`${API_URL}/commission-types/admin`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!response.ok) throw new Error("Unable to load commission types");
+  return response.json();
+}
+
+interface CommissionTypeInput {
+  name: string;
+  priceMin: string;
+  priceMax: string;
+  rules: string;
+  sampleImageUrl?: string | null;
+  active?: boolean;
+}
+
+export async function createCommissionType(token: string, input: CommissionTypeInput): Promise<CommissionType> {
+  const response = await fetch(`${API_URL}/commission-types`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+    body: JSON.stringify(input),
+  });
+  if (!response.ok) {
+    const data = await response.json().catch(() => null);
+    throw new Error(data?.error ?? "Unable to create commission type");
+  }
+  return response.json();
+}
+
+export async function updateCommissionType(token: string, id: string, input: CommissionTypeInput): Promise<CommissionType> {
+  const response = await fetch(`${API_URL}/commission-types/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+    body: JSON.stringify(input),
+  });
+  if (!response.ok) {
+    const data = await response.json().catch(() => null);
+    throw new Error(data?.error ?? "Unable to update commission type");
+  }
+  return response.json();
+}
+
+export async function deleteCommissionType(token: string, id: string): Promise<void> {
+  const response = await fetch(`${API_URL}/commission-types/${id}`, {
+    method: "DELETE",
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!response.ok) {
+    const data = await response.json().catch(() => null);
+    throw new Error(data?.error ?? "Unable to delete commission type");
+  }
 }
 
 interface CreateCommissionOrderInput {
@@ -69,7 +123,7 @@ export async function createCommissionOrder(
 
   if (!response.ok) {
     const data = await response.json().catch(() => null);
-    throw new Error(data?.error ?? "Erro ao solicitar encomenda");
+    throw new Error(data?.error ?? "Unable to submit commission request");
   }
 
   return response.json();
@@ -93,7 +147,7 @@ export async function login(input: LoginInput): Promise<LoginResult> {
 
   if (!response.ok) {
     const data = await response.json().catch(() => null);
-    throw new Error(data?.error ?? "Erro ao fazer login");
+    throw new Error(data?.error ?? "Unable to sign in");
   }
 
   return response.json();
@@ -112,7 +166,20 @@ export async function createDrawing(token: string, input: CreateDrawingInput): P
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
     body: JSON.stringify(input),
   });
-  if (!response.ok) throw new Error("Error creating drawing");
+  if (!response.ok) throw new Error("Unable to create artwork");
+  return response.json();
+}
+
+export async function updateDrawing(token: string, id: string, input: CreateDrawingInput): Promise<Drawing> {
+  const response = await fetch(`${API_URL}/drawings/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+    body: JSON.stringify(input),
+  });
+  if (!response.ok) {
+    const data = await response.json().catch(() => null);
+    throw new Error(data?.error ?? "Unable to update drawing");
+  }
   return response.json();
 }
 
@@ -122,7 +189,7 @@ export async function updateDrawingStatus(token: string, id: string, status: str
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
     body: JSON.stringify({ status }),
   });
-  if (!response.ok) throw new Error("Error updating status");
+  if (!response.ok) throw new Error("Unable to update availability");
   return response.json();
 }
 
@@ -131,7 +198,7 @@ export async function deleteDrawing(token: string, id: string): Promise<void> {
     method: "DELETE",
     headers: { Authorization: `Bearer ${token}` },
   });
-  if (!response.ok) throw new Error("Error deleting drawing");
+  if (!response.ok) throw new Error("Unable to delete artwork");
 }
 
 export async function uploadImage(token: string, file: File): Promise<string> {
@@ -142,7 +209,7 @@ export async function uploadImage(token: string, file: File): Promise<string> {
     headers: { Authorization: `Bearer ${token}` },
     body: formData,
   });
-  if (!response.ok) throw new Error("Error uploading image");
+  if (!response.ok) throw new Error("Unable to upload image");
   const data = await response.json();
   return data.imageUrl;
 }
@@ -150,7 +217,7 @@ export async function getCommissionOrdersAdmin(token: string) {
   const response = await fetch(`${API_URL}/commission-orders`, {
     headers: { Authorization: `Bearer ${token}` },
   });
-  if (!response.ok) throw new Error("Error fetching orders");
+  if (!response.ok) throw new Error("Unable to load the request queue");
   return response.json();
 }
 
@@ -160,7 +227,7 @@ export async function updateCommissionOrder(token: string, id: string, data: Rec
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
     body: JSON.stringify(data),
   });
-  if (!response.ok) throw new Error("Error updating order");
+  if (!response.ok) throw new Error("Unable to update this request");
   return response.json();
 }
 
@@ -169,5 +236,5 @@ export async function deleteCommissionOrder(token: string, id: string) {
     method: "DELETE",
     headers: { Authorization: `Bearer ${token}` },
   });
-  if (!response.ok) throw new Error("Error deleting order");
+  if (!response.ok) throw new Error("Unable to delete this request");
 }

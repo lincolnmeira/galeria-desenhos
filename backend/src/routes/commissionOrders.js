@@ -42,10 +42,22 @@ router.post("/", async (req, res) => {
   try {
     const { commissionTypeId, buyerName, buyerContact } = req.body;
 
-    if (!commissionTypeId || !buyerName || !buyerContact) {
+    if (
+      typeof commissionTypeId !== "string" ||
+      typeof buyerName !== "string" || !buyerName.trim() || buyerName.length > 120 ||
+      typeof buyerContact !== "string" || !buyerContact.trim() || buyerContact.length > 120
+    ) {
       return res
         .status(400)
-        .json({ error: "commissionTypeId, buyerName e buyerContact são obrigatórios" });
+        .json({ error: "Commission type, name and Discord username are required" });
+    }
+
+    const commissionType = await prisma.commissionType.findFirst({
+      where: { id: commissionTypeId, active: true },
+      select: { id: true },
+    });
+    if (!commissionType) {
+      return res.status(409).json({ error: "This commission option is no longer accepting requests" });
     }
 
     const totalOrders = await prisma.commissionOrder.count();
@@ -53,8 +65,9 @@ router.post("/", async (req, res) => {
     const order = await prisma.commissionOrder.create({
       data: {
         commissionTypeId,
-        buyerName,
-        buyerContact,
+        buyerName: buyerName.trim(),
+        buyerContact: buyerContact.trim(),
+        contactPlatform: "discord",
         priority: totalOrders + 1,
       },
     });
@@ -62,10 +75,10 @@ router.post("/", async (req, res) => {
     res.status(201).json(order);
   } catch (error) {
     if (error.code === "P2003") {
-      return res.status(400).json({ error: "commissionTypeId inválido" });
+      return res.status(400).json({ error: "Invalid commission type" });
     }
     console.error(error);
-    res.status(500).json({ error: "Erro ao criar encomenda" });
+    res.status(500).json({ error: "Unable to submit commission request" });
   }
 });
 

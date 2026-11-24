@@ -15,14 +15,14 @@ export function Gallery() {
       .finally(() => setLoading(false));
   }, []);
 
-  if (loading) return <p className="text-center py-10 text-dustyrose">Loading...</p>;
-  if (error) return <p className="text-center py-10 text-coral">{error}</p>;
+  if (loading) return <p role="status" className="mx-auto max-w-7xl px-5 py-16 text-center text-sm text-dustyrose">Loading the gallery...</p>;
+  if (error) return <p role="alert" className="mx-auto max-w-2xl px-5 py-16 text-center text-sm text-coral">{error}</p>;
   if (drawings.length === 0) {
-    return <p className="text-center py-10 text-dustyrose">No drawings available yet.</p>;
+    return <p className="mx-auto max-w-2xl px-5 py-16 text-center text-sm text-dustyrose">New artwork is on its way. Please check back soon.</p>;
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-6 max-w-6xl mx-auto">
+    <div className="mx-auto grid max-w-7xl grid-cols-1 gap-5 px-5 pt-6 sm:grid-cols-2 sm:gap-6 sm:px-8 lg:grid-cols-3 xl:grid-cols-4">
       {drawings.map((drawing) => (
         <DrawingCard key={drawing.id} drawing={drawing} />
       ))}

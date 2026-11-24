@@ -65,14 +65,14 @@ router.post("/:id/request-purchase", async (req, res) => {
     });
 
     if (result.count === 0) {
-      return res.status(409).json({ error: "Este desenho não está mais disponível" });
+      return res.status(409).json({ error: "This artwork is no longer available" });
     }
 
     const drawing = await prisma.drawing.findUnique({ where: { id } });
     res.json(drawing);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Erro ao solicitar compra" });
+    res.status(500).json({ error: "Unable to reserve this artwork" });
   }
 });
 

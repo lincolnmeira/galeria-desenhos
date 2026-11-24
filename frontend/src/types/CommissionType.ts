@@ -4,5 +4,6 @@ export interface CommissionType {
   priceMin: string;
   priceMax: string;
   rules: string;
+  sampleImageUrl?: string | null;
   active: boolean;
 }

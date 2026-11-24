@@ -35,13 +35,14 @@ model Drawing {
 }
 
 model CommissionType {
-  id       String            @id @default(uuid())
-  name     String
-  priceMin Decimal
-  priceMax Decimal
-  rules    String
-  active   Boolean           @default(true)
-  orders   CommissionOrder[]
+  id             String            @id @default(uuid())
+  name           String
+  priceMin       Decimal
+  priceMax       Decimal
+  rules          String
+  sampleImageUrl String?
+  active         Boolean           @default(true)
+  orders         CommissionOrder[]
 }
 
 model CommissionOrder {
@@ -50,6 +51,7 @@ model CommissionOrder {
   commissionType   CommissionType        @relation(fields: [commissionTypeId], references: [id])
   buyerName        String
   buyerContact     String
+  contactPlatform  String                @default("whatsapp")
   priority         Int
   status           CommissionOrderStatus @default(na_fila)
   createdAt        DateTime              @default(now())

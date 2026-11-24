@@ -34,7 +34,7 @@ A web platform for a digital artist to showcase and sell original drawings and t
 
 O site tem dois fluxos principais:
 
-- **Galeria de peças prontas**: desenhos já finalizados, cada um com preço fixo. O visitante escolhe um, é direcionado a uma tela com valor e contato via WhatsApp, e o desenho fica com status `pendente` até a artista confirmar ou negar a venda.
+- **Galeria de peças prontas**: desenhos já finalizados, cada um com preço fixo. O visitante escolhe um, é direcionado a uma tela com valor e contato via Discord, e o desenho fica com status `pendente` até a artista confirmar ou negar a venda.
 - **Encomendas sob medida**: o visitante escolhe um tipo (Bust-up, Half Body, Full Body, Character Design, Chibi...) a partir de uma tabela de preços, e entra numa fila de prioridade gerenciada pela artista.
 
 Toda a gestão (cadastrar/remover desenho, mudar status, gerenciar fila de encomendas) é feita por um painel administrativo restrito à artista.
@@ -97,8 +97,9 @@ Base: `https://galeria-desenhos.onrender.com` (produção) ou `http://localhost:
 ### Tipos de encomenda
 | Método | Rota | Acesso | Descrição |
 |---|---|---|---|
-| GET | `/commission-types` | Público | Lista os tipos disponíveis (tabela de preços) |
-| GET | `/commission-types/:id` | Público | Busca um tipo específico |
+| GET | `/commission-types` | Público | Lista os tipos ativos (tabela de preços) |
+| GET | `/commission-types/admin` | 🔒 Admin | Lista todos os tipos, inclusive pausados |
+| GET | `/commission-types/:id` | Público | Busca um tipo ativo específico |
 | POST | `/commission-types` | 🔒 Admin | Cria um novo tipo |
 | PUT | `/commission-types/:id` | 🔒 Admin | Edita um tipo |
 | DELETE | `/commission-types/:id` | 🔒 Admin | Remove um tipo |
@@ -125,7 +126,7 @@ cd backend
 npm install
 npx prisma generate
 npx prisma migrate dev
-node prisma/seed.js   # cria a conta admin
+node prisma/seed.js   # cria a conta admin e adiciona modalidades iniciais se ainda não existirem
 node src/server.js
 ```
 Requer um `.env` com: `DATABASE_URL`, `DIRECT_URL`, `JWT_SECRET`, `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET`.
@@ -136,12 +137,12 @@ cd frontend
 npm install
 npm run dev
 ```
-Requer um `.env` com: `VITE_API_URL` (URL do backend), `VITE_WHATSAPP_NUMBER`.
+Requer um `.env` com `VITE_API_URL` (URL do backend). `VITE_DISCORD_PROFILE_URL` é opcional; enquanto o perfil da artista não for configurado, o botão abre o app genérico do Discord.
 
 ## Deploy
 
 - **Frontend**: Vercel, root directory `frontend`, deploy automático a cada push na `main`
-- **Backend**: Render (Web Service, free tier), root directory `backend`, build command `npm install && npx prisma generate`, start command `node src/server.js`
+- **Backend**: Render (Web Service, free tier), root directory `backend`, build command `npm install && npx prisma generate && npx prisma migrate deploy`, start command `node src/server.js`
 - **Banco**: Neon (PostgreSQL serverless), mesma instância usada em desenvolvimento e produção
 
 ## Documentação
